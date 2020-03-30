@@ -4,7 +4,20 @@
 
 { config, pkgs, ... }:
 
+let unstableTarball =
+  fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+in
 {
+  nixpkgs.config =
+  {
+    packageOverrides = pkgs:
+    {
+      unstable = import unstableTarball
+      {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
 
   imports =
     [ # Include the results of the hardware scan.
@@ -65,8 +78,8 @@
     vscode
     texlive.combined.scheme-medium
     pygmentex graphviz
-    coq gnumake
-    ghc
+    unstable.coq_8_11 gnumake
+    unstable.ghc
     anki
   ];
 
