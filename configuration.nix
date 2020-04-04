@@ -71,7 +71,7 @@ in
   environment.systemPackages = with pkgs;
   [
     virtualbox
-    pass deja-dup bleachbit
+    pass unstable.deja-dup bleachbit
     wget file
     brave openvpn youtube-dl
     gitAndTools.gitFull pijul
