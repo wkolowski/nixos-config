@@ -72,13 +72,13 @@ in
   [
     virtualbox
     pass unstable.deja-dup bleachbit
-    wget file
+    wget file gnumake
     brave openvpn youtube-dl
-    gitAndTools.gitFull pijul
+    gitAndTools.gitFull
     vscode
     texlive.combined.scheme-medium
     pygmentex graphviz
-    unstable.coq_8_11 gnumake
+    unstable.coq_8_12
     unstable.ghc
     anki
   ];
@@ -133,7 +133,7 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 
   # Custom stuff here.
   nixpkgs.config.allowUnfree = true;
