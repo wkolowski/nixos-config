@@ -37,15 +37,18 @@ in
     };
   };
 
-  networking.hostName = "nixos"; # Define your hostname.
-  networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;
+  # This is required for my network card to work properly.
+  # TODO: change when kernel 5.8 is available out of the box.
+  boot.kernelPackages = pkgs.unstable.linuxPackages_5_8;
+
+  networking.hostName = "nixos";           # Define your hostname.
+  networking.networkmanager.enable = true; # networking.wireless doesn't work for me.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp0s3.useDHCP = true;
+  #networking.useDHCP = false;
+  #networking.interfaces.enp2s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -61,13 +64,19 @@ in
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
 
+  # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
+  # It doesn't work and results in the error "Kernel driver not accessible".
+  # Note that the extension pack makes virtualbox recompile from source which takes long.
+  # TODO: virtualbox doesn't work with kernel 5.8 because of compilation error, so it's off.
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    virtualbox
-    pass unstable.deja-dup bleachbit
-    wget file gnumake
+    pass gnupg pinentry-curses deja-dup bleachbit
+    konsole wget file gnumake lshw gparted
     brave openvpn youtube-dl
     gitAndTools.gitFull
     vscode
@@ -78,10 +87,8 @@ in
     anki
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  # Without this, `pass` fails to ask for the gpg password and is thus unusable.
+  programs.gnupg.agent.enable = true;
 
   # List services that you want to enable:
 
@@ -123,6 +130,7 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
+  users.extraGroups.vboxusers.members = [ "wk" ]; # Required for virtualbox to work.
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
