@@ -8,38 +8,36 @@ let unstableTarball =
   fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
 in
 {
-  nixpkgs.config =
+  nixpkgs.config.packageOverrides = pkgs:
   {
-    packageOverrides = pkgs:
+    unstable = import unstableTarball
     {
-      unstable = import unstableTarball
-      {
-        config = config.nixpkgs.config;
-      };
+      config = config.nixpkgs.config;
     };
   };
 
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
-  # Use the systemd-boot bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.initrd.luks.devices =
+  boot =
   {
-    root =
+    # Use the systemd-boot bootloader.
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+
+    initrd.luks.devices.root =
     {
       device = "/dev/sda3";
       preLVM = true;
     };
-  };
 
-  # This is required for my network card to work properly.
-  # TODO: change when kernel 5.8 is available out of the box.
-  boot.kernelPackages = pkgs.unstable.linuxPackages_5_8;
+    # This is required for my network card to work properly.
+    # TODO: change when kernel 5.8 is available out of the box.
+    kernelPackages = pkgs.unstable.linuxPackages_5_8;
+  };
 
   networking.hostName = "nixos";           # Define your hostname.
   networking.networkmanager.enable = true; # networking.wireless doesn't work for me.
@@ -67,16 +65,17 @@ in
   # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
   # It doesn't work and results in the error "Kernel driver not accessible".
   # Note that the extension pack makes virtualbox recompile from source which takes long.
-  # TODO: virtualbox doesn't work with kernel 5.8 because of compilation error, so it's off.
-  #virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enable = true;
   #virtualisation.virtualbox.host.enableExtensionPack = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    pass gnupg pinentry-curses deja-dup bleachbit
-    konsole wget file gnumake lshw gparted
+    gparted lshw
+    konsole wget file gnumake
+    pass
+    unstable.deja-dup bleachbit
     brave openvpn youtube-dl
     gitAndTools.gitFull
     vscode
@@ -128,15 +127,14 @@ in
   users.users.wk =
   {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "vboxusers" ]; # Provide user with sudo and virtualbox access.
   };
-  users.extraGroups.vboxusers.members = [ "wk" ]; # Required for virtualbox to work.
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.03"; # Did you read the comment?
+  system.stateVersion = "20.09"; # Did you read the comment?
 
   # Custom stuff here.
   nixpkgs.config.allowUnfree = true;

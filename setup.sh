@@ -4,15 +4,20 @@
 # It used to be a markdown file, but then I realized it's better to make it into a shell script.
 # It's based on [this post of Chris Martin](chris-martin.org/2015/installing-nixos).
 
+## Partition table
+
+# | Device    | Size | Code | Name                 |
+# | --------- | ---- | ---- | -------------------- |
+# | /dev/sda1 | 1M   | EF02 | BIOS boot partition  |
+# | /dev/sda2 | 500M | EF00 | EFI System Partition |
+# | /dev/sda3 | rest | 8E00 | Linux LVM            |
+
+# Download a description of the above partition table and put it to disk with `sfdisk`.
+
+sudo curl https://raw.githubusercontent.com/wkolowski/nixos/master/partition-table.sfdisk > partition-table.sfdisk
+sudo sfdisk /dev/sda < partition-table.sfdisk
+
 ## Disk setup
-
-# Use `gparted` (or `fdisk`) to get something like this:
-
-# | Device    | Size | Filesystem  | Flags      | Code | Name                 |
-# | --------- | ---- | ----------- | ---------- | ---- | -------------------- |
-# | /dev/sda1 | 1M   | unformatted | bios, grub | EF02 | BIOS boot partition  |
-# | /dev/sda2 | 500M | fat32       | boot, esp  | EF00 | EFI System Partition |
-# | /dev/sda3 | rest | ext4        |            |      |                      |
 
 # Setup disk encyprtion using LUKS:
 
@@ -56,3 +61,8 @@ sudo mv tmp /mnt/etc/nixos/configuration.nix
 # Finish the installation:
 
 sudo nixos-install
+
+# Set new passwords for root and users.
+
+sudo passwd root
+sudo passwd wk

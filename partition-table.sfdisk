@@ -1,0 +1,5 @@
+label: gpt
+
+size=   1MiB, type= 21686148-6449-6E6F-744E-656564454649
+size= 500MiB, type= uefi, bootable
+              type= lvm
