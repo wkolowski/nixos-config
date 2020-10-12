@@ -13,13 +13,14 @@
 # | /dev/sda3 | rest | 8E00 | Linux LVM            |
 
 # Download a description of the above partition table and put it to disk with `sfdisk`.
+# Beware: it's the weakest part of this script and it may not work.
 
-sudo curl https://raw.githubusercontent.com/wkolowski/nixos/master/partition-table.sfdisk > partition-table.sfdisk
-sudo sfdisk /dev/sda < partition-table.sfdisk
+sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/partition-table-uefi.sfdisk > ptable.sfdisk
+sudo sfdisk /dev/sda < ptable.sfdisk
 
 ## Disk setup
 
-# Setup disk encyprtion using LUKS:
+# Setup disk encryption using LUKS:
 
 sudo cryptsetup luksFormat /dev/sda3
 sudo cryptsetup luksOpen /dev/sda3 sda3_crypt
