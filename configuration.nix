@@ -4,16 +4,46 @@
 
 { config, pkgs, ... }:
 
-let unstableTarball =
-  fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+let
+  # NixOS unstable channel.
+  unstableTarball =
+    fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+
+  # Visual Studio Code extensions.
+  vscode-with-extensions = pkgs.vscode-with-extensions.override
+  {
+    vscodeExtensions =
+      (with pkgs.vscode-extensions;
+      [
+        bbenoist.Nix              # Nix support.
+        james-yu.latex-workshop   # Latex support.
+      ])
+      ++
+      pkgs.vscode-utils.extensionsFromVscodeMarketplace
+      [
+        { # Preview of .dot Graphviz diagrams.
+          name = "graphviz-preview";
+          publisher = "efanzh";
+          version = "1.4.0";
+          sha256 = "1n5dbkhz2c1kc5qqykhq3vaa7d1xxf9mqiy8ipr69pxjvkrcg3qz";
+        }
+      ];
+  };
 in
 {
-  nixpkgs.config.packageOverrides = pkgs:
+  nixpkgs.config =
   {
-    unstable = import unstableTarball
+    # Make the unstable channel available.
+    packageOverrides = pkgs:
     {
-      config = config.nixpkgs.config;
+      unstable = import unstableTarball
+      {
+        config = config.nixpkgs.config;
+      };
     };
+
+    # Allow VSCode.
+    allowUnfree = true;
   };
 
   imports =
@@ -78,9 +108,9 @@ in
     deja-dup
     brave openvpn youtube-dl
     gitAndTools.gitFull
-    vscode
+    vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
-    unstable.coq_8_12
+    unstable.coq_8_12 unstable.coqPackages.equations
     unstable.ghc
     anki
   ];
@@ -134,7 +164,4 @@ in
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "20.09"; # Did you read the comment?
-
-  # Custom stuff here.
-  nixpkgs.config.allowUnfree = true;
 }
