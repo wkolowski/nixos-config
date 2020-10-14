@@ -83,11 +83,16 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
+  #i18n =
+  #{
+  #  consoleFont = "Lat2-Terminus16";
+  #  consoleKeyMap = "pl";
+  #  defaultLocale = "pl_PL.UTF-8";
+  #};
+
+  # Beware: in case of problems with Polish keyboard layout (with the letter ę) try these:
+  # nix-shell -p gnome3.dconf --run "dconf read /org/gnome/desktop/input-sources/xkb-options"
+  # nix-shell -p gnome3.dconf --run "dconf reset /org/gnome/desktop/input-sources/xkb-options"
 
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
@@ -139,7 +144,6 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
