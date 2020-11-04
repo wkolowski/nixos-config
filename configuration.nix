@@ -118,6 +118,8 @@ in
     unstable.coq_8_12 unstable.coqPackages.equations
     unstable.ghc
     anki
+    discord
+    libreoffice
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
