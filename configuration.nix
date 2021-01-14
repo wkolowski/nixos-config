@@ -120,6 +120,7 @@ in
     anki
     discord
     libreoffice
+    fstar
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
