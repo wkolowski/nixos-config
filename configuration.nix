@@ -118,7 +118,7 @@ in
     unstable.coq_8_12 unstable.coqPackages.equations
     unstable.ghc
     anki
-    discord
+    unstable.discord
     libreoffice
     fstar
   ];
