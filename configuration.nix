@@ -115,12 +115,12 @@ in
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
-    unstable.coq_8_12 unstable.coqPackages.equations
     unstable.ghc
+    unstable.coq_8_12 unstable.coqPackages.equations
+    unstable.agda unstable.fstar
     anki
     unstable.discord
     libreoffice
-    fstar
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
