@@ -113,7 +113,7 @@ in
     deja-dup
     brave openvpn youtube-dl
     gitAndTools.gitFull
-    vscode-with-extensions
+    unstable.vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
     unstable.ghc
     unstable.coq_8_12 unstable.coqPackages.equations
