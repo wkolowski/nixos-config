@@ -4,16 +4,46 @@
 
 { config, pkgs, ... }:
 
-let unstableTarball =
-  fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+let
+  # NixOS unstable channel.
+  unstableTarball =
+    fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+
+  # Visual Studio Code extensions.
+  vscode-with-extensions = pkgs.vscode-with-extensions.override
+  {
+    vscodeExtensions =
+      (with pkgs.vscode-extensions;
+      [
+        bbenoist.Nix              # Nix support.
+        james-yu.latex-workshop   # Latex support.
+      ])
+      ++
+      pkgs.vscode-utils.extensionsFromVscodeMarketplace
+      [
+        { # Preview of .dot Graphviz diagrams.
+          name = "graphviz-preview";
+          publisher = "efanzh";
+          version = "1.4.0";
+          sha256 = "1n5dbkhz2c1kc5qqykhq3vaa7d1xxf9mqiy8ipr69pxjvkrcg3qz";
+        }
+      ];
+  };
 in
 {
-  nixpkgs.config.packageOverrides = pkgs:
+  nixpkgs.config =
   {
-    unstable = import unstableTarball
+    # Make the unstable channel available.
+    packageOverrides = pkgs:
     {
-      config = config.nixpkgs.config;
+      unstable = import unstableTarball
+      {
+        config = config.nixpkgs.config;
+      };
     };
+
+    # Allow VSCode.
+    allowUnfree = true;
   };
 
   imports =
@@ -63,6 +93,10 @@ in
   #   defaultLocale = "en_US.UTF-8";
   # };
 
+  # Beware: in case of problems with Polish keyboard layout (with the letter ę) try these:
+  # nix-shell -p gnome3.dconf --run "dconf read /org/gnome/desktop/input-sources/xkb-options"
+  # nix-shell -p gnome3.dconf --run "dconf reset /org/gnome/desktop/input-sources/xkb-options"
+
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
 
@@ -82,11 +116,14 @@ in
     deja-dup
     brave openvpn youtube-dl
     gitAndTools.gitFull
-    vscode
-    texlive.combined.scheme-full python38Packages.pygments graphviz
-    unstable.coq_8_12
-    unstable.ghc
-    anki
+    #unstable.vscode-with-extensions
+    #texlive.combined.scheme-full python38Packages.pygments graphviz
+    #unstable.ghc
+    #unstable.coq_8_12 unstable.coqPackages.equations
+    #unstable.agda unstable.fstar
+    #anki
+    #unstable.discord
+    #libreoffice
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
@@ -113,7 +150,7 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
+  # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
@@ -138,7 +175,4 @@ in
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "20.09"; # Did you read the comment?
-
-  # Custom stuff here.
-  nixpkgs.config.allowUnfree = true;
 }
