@@ -63,10 +63,6 @@ in
       device = "/dev/sda3";
       preLVM = true;
     };
-
-    # This is required for my network card to work properly.
-    # TODO: change when kernel 5.8 is available out of the box.
-    kernelPackages = pkgs.unstable.linuxPackages_5_8;
   };
 
   networking.hostName = "nixos";           # Define your hostname.
@@ -99,7 +95,7 @@ in
 
   # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
   # It doesn't work and results in the error "Kernel driver not accessible".
-  # Note that the extension pack makes virtualbox recompile from source which takes long.
+  # Note that the extension pack makes virtualbox recompile from source which takes a very long time.
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
 
@@ -113,13 +109,13 @@ in
     deja-dup
     brave openvpn youtube-dl
     gitAndTools.gitFull
-    unstable.vscode-with-extensions
+    vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
-    unstable.ghc
-    unstable.coq_8_12 unstable.coqPackages.equations
-    unstable.agda unstable.fstar
+    ghc
+    coq coqPackages.equations
+    agda fstar
     anki
-    unstable.discord
+    discord
     libreoffice
   ];
 
@@ -156,7 +152,7 @@ in
   {
     displayManager.gdm.enable    = true;
     windowManager.i3.enable      = true;
-    desktopManager.gnome3.enable = true;
+    desktopManager.gnome.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -170,5 +166,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 }
