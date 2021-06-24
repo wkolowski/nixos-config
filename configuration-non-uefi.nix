@@ -5,10 +5,6 @@
 { config, pkgs, ... }:
 
 let
-  # NixOS unstable channel.
-  unstableTarball =
-    fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
-
   # Visual Studio Code extensions.
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
@@ -21,7 +17,8 @@ let
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
       [
-        { # Preview of .dot Graphviz diagrams.
+        {
+          # Preview of .dot Graphviz diagrams.
           name = "graphviz-preview";
           publisher = "efanzh";
           version = "1.4.0";
@@ -31,20 +28,8 @@ let
   };
 in
 {
-  nixpkgs.config =
-  {
-    # Make the unstable channel available.
-    packageOverrides = pkgs:
-    {
-      unstable = import unstableTarball
-      {
-        config = config.nixpkgs.config;
-      };
-    };
-
-    # Allow VSCode.
-    allowUnfree = true;
-  };
+  # Allow VSCode.
+  nixpkgs.config.allowUnfree = true;
 
   imports =
   [
@@ -54,7 +39,6 @@ in
 
   boot =
   {
-    # Use the systemd-boot bootloader.
     loader.grub =
     {
       enable = true;
@@ -67,10 +51,6 @@ in
       device = "/dev/sda2";
       preLVM = true;
     };
-
-    # This is required for my network card to work properly.
-    # TODO: change when kernel 5.8 is available out of the box.
-    kernelPackages = pkgs.unstable.linuxPackages_5_8;
   };
 
   networking.hostName = "nixos";           # Define your hostname.
@@ -87,11 +67,12 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
+  #i18n =
+  #{
+  #  consoleFont = "Lat2-Terminus16";
+  #  consoleKeyMap = "pl";
+  #  defaultLocale = "pl_PL.UTF-8";
+  #};
 
   # Beware: in case of problems with Polish keyboard layout (with the letter ę) try these:
   # nix-shell -p gnome3.dconf --run "dconf read /org/gnome/desktop/input-sources/xkb-options"
@@ -102,7 +83,7 @@ in
 
   # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
   # It doesn't work and results in the error "Kernel driver not accessible".
-  # Note that the extension pack makes virtualbox recompile from source which takes long.
+  # Note that the extension pack makes virtualbox recompile from source which takes a very long time.
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
 
@@ -110,24 +91,22 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    konsole wget file gnumake lshw usbutils
+    konsole gnumake lshw usbutils
+    pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted
-    pass
     deja-dup
-    brave openvpn youtube-dl
+    brave youtube-dl
     gitAndTools.gitFull
-    #unstable.vscode-with-extensions
-    #texlive.combined.scheme-full python38Packages.pygments graphviz
-    #unstable.ghc
-    #unstable.coq_8_12 unstable.coqPackages.equations
-    #unstable.agda unstable.fstar
-    #anki
-    #unstable.discord
-    #libreoffice
+    vscode-with-extensions
+    texlive.combined.scheme-full python38Packages.pygments graphviz
+    coq coqPackages.equations
+    ghc agda fstar
+    anki
+    libreoffice
   ];
 
-  # Without this, `pass` fails to ask for the gpg password and is thus unusable.
-  programs.gnupg.agent.enable = true;
+  # `pass` used to be broken without this, but not anymore.
+  #programs.gnupg.agent.enable = true;
 
   # List services that you want to enable:
 
@@ -150,7 +129,6 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
@@ -160,7 +138,7 @@ in
   {
     displayManager.gdm.enable    = true;
     windowManager.i3.enable      = true;
-    desktopManager.gnome3.enable = true;
+    desktopManager.gnome.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -174,5 +152,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 }

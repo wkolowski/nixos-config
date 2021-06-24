@@ -5,10 +5,6 @@
 { config, pkgs, ... }:
 
 let
-  # NixOS unstable channel.
-  unstableTarball =
-    fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
-
   # Visual Studio Code extensions.
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
@@ -21,7 +17,8 @@ let
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
       [
-        { # Preview of .dot Graphviz diagrams.
+        {
+          # Preview of .dot Graphviz diagrams.
           name = "graphviz-preview";
           publisher = "efanzh";
           version = "1.4.0";
@@ -31,20 +28,8 @@ let
   };
 in
 {
-  nixpkgs.config =
-  {
-    # Make the unstable channel available.
-    packageOverrides = pkgs:
-    {
-      unstable = import unstableTarball
-      {
-        config = config.nixpkgs.config;
-      };
-    };
-
-    # Allow VSCode.
-    allowUnfree = true;
-  };
+  # Allow VSCode.
+  nixpkgs.config.allowUnfree = true;
 
   imports =
   [
@@ -103,24 +88,22 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    konsole wget file gnumake lshw usbutils
+    konsole gnumake lshw usbutils
+    pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted
-    pass
     deja-dup
-    brave openvpn youtube-dl
+    brave youtube-dl
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
-    ghc
     coq coqPackages.equations
-    agda fstar
+    ghc agda fstar
     anki
-    discord
     libreoffice
   ];
 
-  # Without this, `pass` fails to ask for the gpg password and is thus unusable.
-  programs.gnupg.agent.enable = true;
+  # `pass` used to be broken without this, but not anymore.
+  #programs.gnupg.agent.enable = true;
 
   # List services that you want to enable:
 
