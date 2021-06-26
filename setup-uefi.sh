@@ -61,9 +61,11 @@ sudo mv tmp /mnt/etc/nixos/configuration.nix
 
 # Finish the installation:
 
-sudo nixos-install
-
-# Set new passwords for root and users.
-
+# Set a new password for root.
+echo "Setting up password for user root."
 sudo passwd root
+
+# Create a user and set a new password.
+echo "Setting up password for user wk."
+sudo useradd wk
 sudo passwd wk

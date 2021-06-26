@@ -28,16 +28,14 @@ let
   };
 in
 {
-  # Allow VSCode.
-  nixpkgs.config.allowUnfree = true;
-
   imports =
   [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
 
-  boot =
+  boot = if builtins.pathExists /sys/firmware/efi/efivars
+  then
   {
     # Use the systemd-boot bootloader.
     loader.systemd-boot.enable = true;
@@ -48,8 +46,23 @@ in
       device = "/dev/sda3";
       preLVM = true;
     };
-  };
+  }
+  else
+  {
+    loader.grub =
+    {
+      enable = true;
+      version = 2;
+      device = "/dev/sda";
+    };
 
+    initrd.luks.devices.root =
+    {
+      device = "/dev/sda2";
+      preLVM = true;
+    };
+  };
+  
   networking.hostName = "nixos";           # Define your hostname.
   networking.networkmanager.enable = true; # networking.wireless doesn't work for me.
 
@@ -84,6 +97,9 @@ in
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
 
+  # Allow VSCode.
+  nixpkgs.config.allowUnfree = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs;
@@ -102,8 +118,8 @@ in
     libreoffice
   ];
 
-  # `pass` used to be broken without this, but not anymore.
-  #programs.gnupg.agent.enable = true;
+  # Without this, `pass` fails to ask for the gpg password and is thus unusable.
+  programs.gnupg.agent.enable = true;
 
   # List services that you want to enable:
 

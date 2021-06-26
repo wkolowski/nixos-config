@@ -14,7 +14,7 @@
 # Download a description of the above partition table and put it to disk with `sfdisk`.
 # Beware: it's the weakest part of this script and it may not work.
 
-sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/partition-table-non-uefi.sfdisk > ptable.sfdisk
+sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/partition-table-bios.sfdisk > ptable.sfdisk
 sudo sfdisk /dev/sda < ptable.sfdisk
 
 ## Disk setup
@@ -55,16 +55,17 @@ sudo swapon /dev/vg/swap
 # Overwrite the software configuration with the one taken from this repo.
 
 sudo nixos-generate-config --root /mnt
-sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/configuration-non-uefi.nix > tmp
+sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/configuration.nix > tmp
 sudo mv tmp /mnt/etc/nixos/configuration.nix
 
 # Finish the installation:
-
 sudo nixos-install
 
 # Set a new password for root.
+echo "Setting up password for user root."
 sudo passwd root
 
 # Create a user and set a new password.
+echo "Setting up password for user wk."
 sudo useradd wk
 sudo passwd wk
