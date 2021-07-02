@@ -104,15 +104,16 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    konsole gnumake lshw usbutils
+    konsole cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
-    gparted
+    gparted bleachbit
     deja-dup
     brave youtube-dl
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
     coq coqPackages.equations
+    nodePackages.node2nix # Useful when working with jsCoq.
     ghc agda fstar
     anki
     libreoffice
