@@ -107,7 +107,8 @@ in
     konsole cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted bleachbit
-    deja-dup
+    rhythmbox
+    deja-dup duplicity
     brave youtube-dl
     gitAndTools.gitFull
     vscode-with-extensions
