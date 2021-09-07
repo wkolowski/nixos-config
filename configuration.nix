@@ -106,7 +106,7 @@ in
   [
     konsole cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
-    gparted bleachbit
+    gparted ntfsprogs bleachbit
     rhythmbox
     deja-dup duplicity
     brave youtube-dl
