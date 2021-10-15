@@ -113,7 +113,7 @@ in
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python38Packages.pygments graphviz
-    coq coqPackages.equations
+    coq coqPackages.equations coqPackages.stdpp
     nodePackages.node2nix # Useful when working with jsCoq.
     ghc agda fstar
     anki
