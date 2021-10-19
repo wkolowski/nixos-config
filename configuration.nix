@@ -99,6 +99,7 @@ in
 
   # Allow VSCode.
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowBroken = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -107,17 +108,21 @@ in
     konsole cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted ntfsprogs bleachbit
-    rhythmbox
     deja-dup duplicity
     brave youtube-dl
-    gitAndTools.gitFull
-    vscode-with-extensions
-    texlive.combined.scheme-full python38Packages.pygments graphviz
-    coq coqPackages.equations coqPackages.stdpp
-    nodePackages.node2nix # Useful when working with jsCoq.
-    ghc agda fstar
+    rhythmbox
     anki
     libreoffice
+
+    nodePackages.node2nix # Useful when working with jsCoq.
+    gitAndTools.gitFull
+    vscode-with-extensions
+    texlive.combined.scheme-full python39Packages.pygments graphviz
+    ghc
+    coq coqPackages.equations coqPackages.stdpp
+    agda
+    fstar
+    z3 stack # Needed to install the Granule language.
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
