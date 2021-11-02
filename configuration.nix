@@ -6,6 +6,10 @@
 
 let
   # Visual Studio Code extensions.
+  # Protip: to get sha256 of some extensions, download it from VSCode Marketplace
+  # and then run shasum -a 256 on the .vsix file, i.e.
+  # shasum -a 256 meraymond.idris-vscode-0.0.11.vsix
+
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
     vscodeExtensions =
@@ -24,6 +28,20 @@ let
           version = "1.4.0";
           sha256 = "1n5dbkhz2c1kc5qqykhq3vaa7d1xxf9mqiy8ipr69pxjvkrcg3qz";
         }
+        {
+          # Idris2 support.
+          name = "idris-vscode";
+          publisher = "meraymond";
+          version = "0.0.11";
+          sha256 = "185cf9880cda675aa7a07c73c65a2d9c3026f02c79b183187764f4eb36cedb35";
+        }
+        #{
+        #  # Idris2 support.
+        #  name = "idris2-lsp";
+        #  publisher = "bamboo";
+        #  version = "0.7.0";
+        #  sha256 = "f1e2ef1ca50f06881ee74c3339fa7968afd75491255732ad8a5f188fe3f03545";
+        #}
       ];
   };
 in
@@ -122,6 +140,7 @@ in
     coq coqPackages.equations coqPackages.stdpp
     agda
     fstar
+    idris2
     z3 stack # Needed to install the Granule language.
   ];
 
