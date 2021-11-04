@@ -130,7 +130,7 @@ in
     brave youtube-dl
     rhythmbox
     anki
-    libreoffice
+    libreoffice xournal gimp
 
     nodePackages.node2nix # Useful when working with jsCoq.
     gitAndTools.gitFull
