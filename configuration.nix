@@ -131,6 +131,7 @@ in
     rhythmbox
     anki
     libreoffice xournal gimp
+    slack # discord
 
     nodePackages.node2nix # Useful when working with jsCoq.
     gitAndTools.gitFull
