@@ -15,7 +15,7 @@ let
     vscodeExtensions =
       (with pkgs.vscode-extensions;
       [
-        bbenoist.Nix              # Nix support.
+        bbenoist.nix              # Nix support.
         james-yu.latex-workshop   # Latex support.
       ])
       ++
@@ -112,8 +112,8 @@ in
   # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
   # It doesn't work and results in the error "Kernel driver not accessible".
   # Note that the extension pack makes virtualbox recompile from source which takes a very long time.
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
 
   # Allow VSCode.
   nixpkgs.config.allowUnfree = true;
@@ -131,7 +131,7 @@ in
     rhythmbox
     anki
     libreoffice xournal gimp
-    slack # discord
+    slack # tdesktop discord
 
     nodePackages.node2nix # Useful when working with jsCoq.
     gitAndTools.gitFull
@@ -192,5 +192,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.05"; # Did you read the comment?
+  system.stateVersion = "21.11"; # Did you read the comment?
 }
