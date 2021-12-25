@@ -1,4 +1,0 @@
-label: dos
-
-size= 500MiB, type= linux, bootable
-              type= lvm

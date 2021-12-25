@@ -52,8 +52,7 @@ in
     ./hardware-configuration.nix
   ];
 
-  boot = if builtins.pathExists /sys/firmware/efi/efivars
-  then
+  boot =
   {
     # Use the systemd-boot bootloader.
     loader.systemd-boot.enable = true;
@@ -62,21 +61,6 @@ in
     initrd.luks.devices.root =
     {
       device = "/dev/sda3";
-      preLVM = true;
-    };
-  }
-  else
-  {
-    loader.grub =
-    {
-      enable = true;
-      version = 2;
-      device = "/dev/sda";
-    };
-
-    initrd.luks.devices.root =
-    {
-      device = "/dev/sda2";
       preLVM = true;
     };
   };
@@ -115,7 +99,7 @@ in
   #virtualisation.virtualbox.host.enable = true;
   #virtualisation.virtualbox.host.enableExtensionPack = true;
 
-  # Allow VSCode.
+  # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
 
@@ -131,14 +115,14 @@ in
     rhythmbox
     anki
     libreoffice xournal gimp
-    slack # tdesktop discord
+    # slack tdesktop discord # Better use the browser versions.
 
     nodePackages.node2nix # Useful when working with jsCoq.
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc
-    coq coqPackages.equations coqPackages.stdpp
+    coq coqPackages.equations coqPackages.stdpp coqPackages.itauto
     agda
     fstar
     idris2

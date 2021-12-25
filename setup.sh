@@ -8,34 +8,35 @@
 
 # | Device    | Size | Code | Name                 |
 # | --------- | ---- | ---- | -------------------- |
-# | /dev/sda1 | 500M |      | boot                 |
-# | /dev/sda2 | rest | 8E00 | Linux LVM            |
+# | /dev/sda1 | 1M   | EF02 | BIOS boot partition  |
+# | /dev/sda2 | 500M | EF00 | EFI System Partition |
+# | /dev/sda3 | rest | 8E00 | Linux LVM            |
 
 # Download a description of the above partition table and put it to disk with `sfdisk`.
 # Beware: it's the weakest part of this script and it may not work.
 
-sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/partition-table-bios.sfdisk > ptable.sfdisk
+sudo curl https://raw.githubusercontent.com/wkolowski/nixos-config/master/partition-table.sfdisk > ptable.sfdisk
 sudo sfdisk /dev/sda < ptable.sfdisk
 
 ## Disk setup
 
 # Setup disk encryption using LUKS:
 
-sudo cryptsetup luksFormat /dev/sda2
-sudo cryptsetup luksOpen /dev/sda2 sda2_crypt
+sudo cryptsetup luksFormat /dev/sda3
+sudo cryptsetup luksOpen /dev/sda3 sda3_crypt
 
 # Create LVM groups and volumes:
 
-sudo pvcreate /dev/mapper/sda2_crypt
+sudo pvcreate /dev/mapper/sda3_crypt
 
-sudo vgcreate vg /dev/mapper/sda2_crypt
+sudo vgcreate vg /dev/mapper/sda3_crypt
 
 sudo lvcreate -n swap vg -L 8G
 sudo lvcreate -n root vg -l 100%FREE
 
 # Make new filesystems and swap:
 
-sudo mkfs.vfat -n BOOT /dev/sda1
+sudo mkfs.vfat -n BOOT /dev/sda2
 sudo mkfs.ext4 -L root /dev/vg/root
 sudo mkswap -L swap /dev/vg/swap
 
@@ -46,7 +47,7 @@ sudo mkswap -L swap /dev/vg/swap
 sudo mount /dev/vg/root /mnt
 
 sudo mkdir /mnt/boot
-sudo mount /dev/sda1 /mnt/boot
+sudo mount /dev/sda2 /mnt/boot
 
 sudo swapon /dev/vg/swap
 
