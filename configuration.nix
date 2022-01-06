@@ -112,6 +112,7 @@ in
     gparted ntfsprogs bleachbit
     deja-dup duplicity
     brave youtube-dl
+    calibre # For converting between ebook formats.
     rhythmbox
     anki
     libreoffice xournal gimp
