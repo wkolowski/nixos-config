@@ -112,7 +112,7 @@ in
     gparted ntfsprogs bleachbit
     deja-dup duplicity
     brave youtube-dl
-    calibre # For converting between ebook formats.
+    # calibre # For converting between ebook formats. Tip: better use nix-shell -p calibre.
     rhythmbox
     anki
     libreoffice xournal gimp
@@ -122,7 +122,7 @@ in
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
-    ghc
+    ghc haskellPackages.alex haskellPackages.happy
     coq coqPackages.equations coqPackages.stdpp coqPackages.itauto
     agda
     fstar
