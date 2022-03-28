@@ -5,6 +5,10 @@
 { config, pkgs, ... }:
 
 let
+  # NixOS unstable channel.
+  unstableTarball =
+    fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+
   # Visual Studio Code extensions.
   # Protip: to get sha256 of some extensions, download it from VSCode Marketplace
   # and then run shasum -a 256 on the .vsix file, i.e.
@@ -46,6 +50,22 @@ let
   };
 in
 {
+  nixpkgs.config =
+  {
+    # Make the unstable channel available.
+    packageOverrides = pkgs:
+    {
+      unstable = import unstableTarball
+      {
+        config = config.nixpkgs.config;
+      };
+    };
+
+    # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
+    allowUnfree = true;
+    allowBroken = true;
+  };
+
   imports =
   [
     # Include the results of the hardware scan.
@@ -99,10 +119,6 @@ in
   #virtualisation.virtualbox.host.enable = true;
   #virtualisation.virtualbox.host.enableExtensionPack = true;
 
-  # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowBroken = true;
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs;
@@ -123,7 +139,8 @@ in
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy
-    coq coqPackages.equations coqPackages.stdpp coqPackages.itauto
+    unstable.coqPackages_8_13.coq unstable.coqPackages_8_13.stdpp unstable.coqPackages_8_13.itauto unstable.coqPackages_8_13.equations 
+    #coq coqPackages.stdpp coqPackages.itauto coqPackages.equations 
     agda
     fstar
     idris2
