@@ -46,6 +46,13 @@ let
         #  version = "0.7.0";
         #  sha256 = "f1e2ef1ca50f06881ee74c3339fa7968afd75491255732ad8a5f188fe3f03545";
         #}
+        {
+          # Lean 4 support.
+          name = "lean4";
+          publisher = "leanprover";
+          version = "0.0.70";
+          sha256 = "32de1da75197b5011d7ae9ac8d382c4ad2078817b5b9d294ea021925502f2fae";
+        }
       ];
   };
 in
