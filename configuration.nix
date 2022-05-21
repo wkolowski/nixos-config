@@ -146,8 +146,7 @@ in
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy
-    unstable.coqPackages_8_13.coq unstable.coqPackages_8_13.stdpp unstable.coqPackages_8_13.itauto unstable.coqPackages_8_13.equations 
-    #coq coqPackages.stdpp coqPackages.itauto coqPackages.equations 
+    unstable.coqPackages_8_15.coq unstable.coqPackages_8_15.stdpp unstable.coqPackages_8_15.itauto unstable.coqPackages_8_15.equations
     agda
     fstar
     idris2
