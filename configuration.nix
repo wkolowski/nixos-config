@@ -146,7 +146,8 @@ in
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy
-    unstable.coqPackages_8_15.coq unstable.coqPackages_8_15.stdpp unstable.coqPackages_8_15.itauto unstable.coqPackages_8_15.equations
+    #unstable.coqPackages_8_15.coq unstable.coqPackages_8_15.stdpp unstable.coqPackages_8_15.itauto unstable.coqPackages_8_15.equations
+    coqPackages_8_15.coq coqPackages_8_15.stdpp coqPackages_8_15.itauto coqPackages_8_15.equations
     agda
     fstar
     idris2
@@ -184,8 +185,8 @@ in
   # GNOME desktop.
   services.xserver =
   {
-    displayManager.gdm.enable    = true;
-    windowManager.i3.enable      = true;
+    displayManager.gdm.enable   = true;
+    windowManager.i3.enable     = true;
     desktopManager.gnome.enable = true;
   };
 
@@ -200,5 +201,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "22.05"; # Did you read the comment?
 }
