@@ -130,7 +130,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    konsole cht-sh gnumake lshw usbutils
+    konsole gnome.gedit cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted ntfsprogs bleachbit
     deja-dup duplicity
