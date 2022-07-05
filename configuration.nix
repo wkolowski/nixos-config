@@ -134,7 +134,7 @@ in
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted ntfsprogs bleachbit
     deja-dup duplicity
-    brave youtube-dl
+    unstable.brave youtube-dl
     # calibre # For converting between ebook formats. Tip: better use nix-shell -p calibre.
     rhythmbox
     anki
