@@ -5,6 +5,9 @@
 { config, pkgs, ... }:
 
 let
+  # Turn on flakes and nix-command.
+  #nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # NixOS unstable channel.
   unstableTarball =
     fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
@@ -146,12 +149,17 @@ in
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy
-    coqPackages_8_15.coq coqPackages_8_15.coqide coqPackages_8_15.stdpp coqPackages_8_15.itauto coqPackages_8_15.equations
+    #coqPackages_8_16.coq coqPackages_8_16.coqide coqPackages_8_16.stdpp coqPackages_8_16.itauto coqPackages_8_16.equations
+    opam
     agda
     fstar
     idris2
     z3 stack # Needed to install the Granule language.
   ];
+  # Workaround for Coq.
+  # use `nix-shell -p` with the packages below to install Coq using opam
+  # Also, don't forget to make symlinks for /bin/bash and /bin/sh... this is silly.
+  # gcc gmp pkgconfig ocamlPackages.lablgtk3 ocamlPackages.lablgtk3-sourceview3 gtksourceview gnome.adwaita-icon-theme
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
   programs.gnupg.agent.enable = true;
