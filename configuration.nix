@@ -56,6 +56,13 @@ let
           version = "0.0.70";
           sha256 = "32de1da75197b5011d7ae9ac8d382c4ad2078817b5b9d294ea021925502f2fae";
         }
+        {
+          # Unison support. Installation of Unison itself: https://github.com/ceedubs/unison-nix/
+          name = "unison";
+          publisher = "unison-lang";
+          version = "0.0.8";
+          sha256 = "b66ab579f00fdd98e9f3206e29a7edd2368c4efbdb7511b3ac991d9eec807880";
+        }
       ];
   };
 in
