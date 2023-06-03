@@ -185,6 +185,9 @@ in
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+  # Enable bluetooth.
+  hardware.bluetooth.enable = true;
+
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -215,5 +218,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "22.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }
