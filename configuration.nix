@@ -156,8 +156,8 @@ in
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy
-    #coqPackages_8_16.coq coqPackages_8_16.coqide coqPackages_8_16.stdpp coqPackages_8_16.itauto coqPackages_8_16.equations
-    opam
+    #coqPackages_8_18.coq coqPackages_8_18.coqide coqPackages_8_18.stdpp coqPackages_8_18.itauto coqPackages_8_18.equations
+    #opam
     agda
     fstar
     idris2
@@ -218,5 +218,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }
