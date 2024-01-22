@@ -24,6 +24,11 @@ let
       [
         bbenoist.nix              # Nix support.
         james-yu.latex-workshop   # Latex support.
+
+        # Haskell support.
+        justusadam.language-haskell
+        haskell.haskell
+
       ])
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
@@ -155,7 +160,7 @@ in
     gitAndTools.gitFull
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
-    ghc haskellPackages.alex haskellPackages.happy
+    ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
     #coqPackages_8_18.coq coqPackages_8_18.coqide coqPackages_8_18.stdpp coqPackages_8_18.itauto coqPackages_8_18.equations
     #opam
     agda
