@@ -28,7 +28,6 @@ let
         # Haskell support.
         justusadam.language-haskell
         haskell.haskell
-
       ])
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
@@ -67,6 +66,13 @@ let
           publisher = "unison-lang";
           version = "0.0.8";
           sha256 = "b66ab579f00fdd98e9f3206e29a7edd2368c4efbdb7511b3ac991d9eec807880";
+        }
+        {
+          # Twelf support.
+          name = "twelf-extension-pack";
+          publisher = "ivan-m";
+          version = "1.0.1";
+          sha256 = "e90d4d6f1ad5c439af8c91bd80d8f227cf4debf6c85b82a2349302837b8d999a";
         }
       ];
   };
@@ -167,6 +173,7 @@ in
     fstar
     idris2
     z3 stack # Needed to install the Granule language.
+    twelf
   ];
   # Workaround for Coq.
   # use `nix-shell -p` with the packages below to install Coq using opam
