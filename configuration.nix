@@ -151,11 +151,11 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    konsole gnome.gedit cht-sh gnumake lshw usbutils
+    konsole gedit cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted ntfsprogs bleachbit
     deja-dup duplicity
-    brave firefox youtube-dl
+    unstable.brave firefox unstable.youtube-dl
     # calibre # For converting between ebook formats. Tip: better use nix-shell -p calibre.
     rhythmbox
     anki
@@ -181,7 +181,7 @@ in
   # gcc gmp pkgconfig ocamlPackages.lablgtk3 ocamlPackages.lablgtk3-sourceview3 gtksourceview gnome.adwaita-icon-theme
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
-  programs.gnupg.agent.enable = true;
+  # programs.gnupg.agent.enable = true;
 
   # List services that you want to enable:
 
@@ -206,7 +206,7 @@ in
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
@@ -230,5 +230,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 }
