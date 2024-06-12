@@ -181,7 +181,7 @@ in
   # gcc gmp pkgconfig ocamlPackages.lablgtk3 ocamlPackages.lablgtk3-sourceview3 gtksourceview gnome.adwaita-icon-theme
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
-  # programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.enable = true;
 
   # List services that you want to enable:
 
