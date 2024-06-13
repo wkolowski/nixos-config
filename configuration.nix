@@ -174,6 +174,7 @@ in
     idris2
     z3 stack # Needed to install the Granule language.
     twelf
+    smlnj mlton rlwrap # Needed to build Athena from source.
   ];
   # Workaround for Coq.
   # use `nix-shell -p` with the packages below to install Coq using opam
