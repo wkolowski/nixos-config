@@ -74,6 +74,13 @@ let
           version = "1.0.1";
           sha256 = "e90d4d6f1ad5c439af8c91bd80d8f227cf4debf6c85b82a2349302837b8d999a";
         }
+        {
+          # Athena support. Installation of Athena from source: https://github.com/AthenaFoundation/athena/wiki/Building-Athena
+          name = "athena-language";
+          publisher = "athenafoundation";
+          version = "0.0.1";
+          sha256 = "b6ebbc82b1ac4ab4adcf71b885b74568d3e33dc917ae238cc7597eb1768719be";
+        }
       ];
   };
 in
