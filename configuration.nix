@@ -174,8 +174,7 @@ in
     vscode-with-extensions
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
-    #coqPackages_8_18.coq coqPackages_8_18.coqide coqPackages_8_18.stdpp coqPackages_8_18.itauto coqPackages_8_18.equations
-    #opam
+    coq coqPackages.coqide # To get libraries in a local project: nix-shell -p coq coqPackages.coqide coqPackages.stdpp coqPackages.itauto coqPackages.equations
     agda
     fstar
     idris2
@@ -183,10 +182,6 @@ in
     twelf
     smlnj mlton rlwrap # Needed to build Athena from source.
   ];
-  # Workaround for Coq.
-  # use `nix-shell -p` with the packages below to install Coq using opam
-  # Also, don't forget to make symlinks for /bin/bash and /bin/sh... this is silly.
-  # gcc gmp pkgconfig ocamlPackages.lablgtk3 ocamlPackages.lablgtk3-sourceview3 gtksourceview gnome.adwaita-icon-theme
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
   programs.gnupg.agent.enable = true;
