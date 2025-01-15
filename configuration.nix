@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   # Turn on flakes and nix-command.
@@ -203,8 +203,8 @@ in
   # Enable bluetooth.
   hardware.bluetooth.enable = true;
 
-  # Enable sound.
-  sound.enable = true;
+  # Enable sound. Use PulseAudio, disable PipeWire.
+  services.pipewire.enable = lib.mkForce false;
   hardware.pulseaudio.enable = true;
 
   # Enable the X11 windowing system.
@@ -233,5 +233,5 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 }
