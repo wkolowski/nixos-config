@@ -204,8 +204,11 @@ in
   hardware.bluetooth.enable = true;
 
   # Enable sound. Use PulseAudio, disable PipeWire.
-  services.pipewire.enable = lib.mkForce false;
-  hardware.pulseaudio.enable = true;
+  #services.pipewire.enable = lib.mkForce false;
+  #hardware.pulseaudio.enable = true;
+  services.pipewire.enable = true;
+  services.pipewire.pulse.enable = true;
+  hardware.pulseaudio.enable = false;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
