@@ -17,6 +17,9 @@ let
   # and then run shasum -a 256 on the .vsix file, i.e.
   # shasum -a 256 meraymond.idris-vscode-0.0.11.vsix
 
+  # Axi syntax highlighting.
+  axi-syntax-highlighting = pkgs.callPackage /home/wk/Code/TeX/Axi/vscode-axi/default.nix {};
+
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
     vscodeExtensions =
@@ -28,6 +31,9 @@ let
         # Haskell support.
         justusadam.language-haskell
         haskell.haskell
+
+        # Axi support.
+        axi-syntax-highlighting
       ])
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
@@ -81,6 +87,13 @@ let
           version = "0.0.1";
           sha256 = "b6ebbc82b1ac4ab4adcf71b885b74568d3e33dc917ae238cc7597eb1768719be";
         }
+        #{
+          # tree-sitter support.
+          #name = "tree-sitter-vscode";
+          #publisher = "AlecGhost";
+          #version = "0.1.0";
+          #sha256 = "3e3aadf774188a3d150534abf31ee81e738f70a9fbbbdee776364996cbb1da9d";
+        #}
       ];
   };
 in
@@ -94,6 +107,9 @@ in
       {
         config = config.nixpkgs.config;
       };
+
+      pkgsOld = import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/91247c747d9cf99c7e82c44119c808d1d55c16d5.tar.gz"
+      ) {};
     };
 
     # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
@@ -171,7 +187,7 @@ in
 
     nodePackages.node2nix # Useful when working with jsCoq.
     gitAndTools.gitFull
-    vscode-with-extensions
+    vscode-with-extensions unstable.code-cursor
     texlive.combined.scheme-full python39Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
     coq coqPackages.coqide # To get libraries in a local project: nix-shell -p coq coqPackages.coqide coqPackages.stdpp coqPackages.itauto coqPackages.equations
@@ -181,6 +197,12 @@ in
     z3 stack # Needed to install the Granule language.
     twelf
     smlnj mlton rlwrap # Needed to build Athena from source.
+    #(tree-sitter.override { webUISupport = true; }) nodejs emscripten binaryen
+    #(unstable.tree-sitter.override { webUISupport = true; }) unstable.nodejs unstable.emscripten unstable.binaryen
+    #tree-sitter nodejs vsce
+    #(unstable.tree-sitter.override { webUISupport = true; }) nodejs
+    #(pkgsOld.tree-sitter.override { webUISupport = true; }) pkgsOld.nodejs pkgsOld.emscripten pkgsOld.binaryen pkgsOld.docker
+    unstable.tree-sitter nodejs
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
