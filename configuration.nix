@@ -18,7 +18,7 @@ let
   # shasum -a 256 meraymond.idris-vscode-0.0.11.vsix
 
   # Axi syntax highlighting.
-  axi-syntax-highlighting = pkgs.callPackage /home/wk/Code/TeX/Axi/vscode-axi/default.nix {};
+  #axi-syntax-highlighting = pkgs.callPackage /home/wk/Code/TeX/Axi/vscode-axi/default.nix {};
 
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
@@ -33,7 +33,7 @@ let
         haskell.haskell
 
         # Axi support.
-        axi-syntax-highlighting
+        #axi-syntax-highlighting
       ])
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
@@ -108,8 +108,7 @@ in
         config = config.nixpkgs.config;
       };
 
-      pkgsOld = import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/91247c747d9cf99c7e82c44119c808d1d55c16d5.tar.gz"
-      ) {};
+      #pkgsOld = import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/91247c747d9cf99c7e82c44119c808d1d55c16d5.tar.gz") {};
     };
 
     # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
@@ -174,7 +173,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    konsole gedit cht-sh gnumake lshw usbutils
+    kdePackages.konsole gedit cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted ntfsprogs bleachbit
     deja-dup duplicity
@@ -182,15 +181,15 @@ in
     # calibre # For converting between ebook formats. Tip: better use nix-shell -p calibre.
     rhythmbox
     anki
-    libreoffice xournal gimp
+    libreoffice gimp #xournal
     # slack tdesktop discord # Better use the browser versions.
 
     nodePackages.node2nix # Useful when working with jsCoq.
-    gitAndTools.gitFull
+    gitFull
     vscode-with-extensions unstable.code-cursor
-    texlive.combined.scheme-full python39Packages.pygments graphviz
+    texlive.combined.scheme-full python3Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
-    coq coqPackages.coqide # To get libraries in a local project: nix-shell -p coq coqPackages.coqide coqPackages.stdpp coqPackages.itauto coqPackages.equations
+    coq_8_20 coqPackages_8_20.coqide # To get libraries in a local project: nix-shell -p coq coqPackages.coqide coqPackages.stdpp coqPackages.itauto coqPackages.equations
     agda
     fstar
     idris2
@@ -202,7 +201,7 @@ in
     #tree-sitter nodejs vsce
     #(unstable.tree-sitter.override { webUISupport = true; }) nodejs
     #(pkgsOld.tree-sitter.override { webUISupport = true; }) pkgsOld.nodejs pkgsOld.emscripten pkgsOld.binaryen pkgsOld.docker
-    unstable.tree-sitter nodejs
+    #unstable.tree-sitter nodejs
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
@@ -230,7 +229,7 @@ in
   #hardware.pulseaudio.enable = true;
   services.pipewire.enable = true;
   services.pipewire.pulse.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -240,11 +239,11 @@ in
   # services.xserver.libinput.enable = true;
 
   # GNOME desktop.
-  services.xserver =
+  services =
   {
-    displayManager.gdm.enable   = true;
-    windowManager.i3.enable     = true;
-    desktopManager.gnome.enable = true;
+    xserver.windowManager.i3.enable = true;
+    displayManager.gdm.enable       = true;
+    desktopManager.gnome.enable     = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -259,4 +258,17 @@ in
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "24.11"; # Did you read the comment?
+
+  nix.gc =
+  {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
+  nix.optimise =
+  {
+    automatic = true;
+    dates = [ "weekly" ];
+  };
 }
