@@ -190,6 +190,7 @@ in
     texlive.combined.scheme-full python3Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
     coq_8_20 coqPackages_8_20.coqide # To get libraries in a local project: nix-shell -p coq coqPackages.coqide coqPackages.stdpp coqPackages.itauto coqPackages.equations
+    #(coq_9_1.override { buildIde = true; })
     agda
     fstar
     idris2
