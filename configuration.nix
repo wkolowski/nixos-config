@@ -5,9 +5,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  # Turn on flakes and nix-command.
-  #nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   # NixOS unstable channel.
   unstableTarball =
     fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
@@ -25,8 +22,15 @@ let
     vscodeExtensions =
       (with pkgs.vscode-extensions;
       [
-        bbenoist.nix              # Nix support.
-        james-yu.latex-workshop   # Latex support.
+        # Nix support.
+        bbenoist.nix
+
+        # Latex support.
+        james-yu.latex-workshop
+
+        # Coq support.
+        #rocq-prover.vsrocq
+        #maximedenes.vscoq
 
         # Haskell support.
         justusadam.language-haskell
@@ -38,6 +42,30 @@ let
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
       [
+        {
+          name = "vsrocq";
+          publisher = "rocq-prover";
+          version = "2.3.4";
+          sha256 = "1h3y9549jfbmd6lhkncmhfnd7yisjr4j855gnw8bm1bj9c4jhdnv";
+        }
+        {
+          name = "wasm-wasi-core";
+          publisher = "ms-vscode";
+          version = "1.0.2";
+          sha256 = "1j6gjflxhy04jy2jrl2h3l8xzj2bivnd5gws636v7w46yqsczg46";
+        }
+        {
+          name = "coq-lsp";
+          publisher = "ejgallego";
+          version = "0.2.4";
+          sha256 = "0ak9sqbhyrrsz1r0d20mjzdyjw49ry1r3q3h10fp2rqdgf5zcrxk";
+        }
+        {
+          name = "coqpilot";
+          publisher = "JetBrains-Research";
+          version = "2.4.3";
+          sha256 = "16615f3zaa3dhprsw6a845xc3cgfff9l2sd4kaq4fpa8nhic754m";
+        }
         {
           # Preview of .dot Graphviz diagrams.
           name = "graphviz-preview";
@@ -189,7 +217,7 @@ in
     vscode-with-extensions unstable.code-cursor
     texlive.combined.scheme-full python3Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
-    coq_8_20 coqPackages_8_20.coqide # To get libraries in a local project: nix-shell -p coq coqPackages.coqide coqPackages.stdpp coqPackages.itauto coqPackages.equations
+    coq_8_20 coqPackages_8_20.coqide coqPackages_8_20.coq-lsp rocqPackages.vsrocq-language-server coqPackages_8_20.vscoq-language-server (lib.getBin coqPackages_8_20.vscoq-language-server)
     #(coq_9_1.override { buildIde = true; })
     agda
     fstar
@@ -260,16 +288,30 @@ in
   # should.
   system.stateVersion = "24.11"; # Did you read the comment?
 
-  nix.gc =
-  {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
 
-  nix.optimise =
+  nix =
   {
-    automatic = true;
-    dates = [ "weekly" ];
+    settings =
+    {
+      # Turn on flakes and nix-command.
+      experimental-features = [ "nix-command" "flakes" ];
+
+      # 0 means "use all available cores"
+      cores = 0;
+      max-jobs = "auto";
+    };
+
+    gc =
+    {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+
+    optimise =
+    {
+      automatic = true;
+      dates = [ "weekly" ];
+    };
   };
 }
