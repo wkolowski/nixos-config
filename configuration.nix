@@ -213,8 +213,10 @@ in
     # slack tdesktop discord # Better use the browser versions.
 
     nodePackages.node2nix # Useful when working with jsCoq.
+    #direnv nix-direnv
     gitFull
     vscode-with-extensions unstable.code-cursor
+    unstable.claude-code
     texlive.combined.scheme-full python3Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
     coq_8_20 coqPackages_8_20.coqide coqPackages_8_20.coq-lsp rocqPackages.vsrocq-language-server coqPackages_8_20.vscoq-language-server (lib.getBin coqPackages_8_20.vscoq-language-server)
