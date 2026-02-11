@@ -216,7 +216,7 @@ in
     #direnv nix-direnv
     gitFull
     vscode-with-extensions unstable.code-cursor
-    unstable.claude-code
+    unstable.claude-code unstable.codex
     texlive.combined.scheme-full python3Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
     coq_8_20 coqPackages_8_20.coqide coqPackages_8_20.coq-lsp rocqPackages.vsrocq-language-server coqPackages_8_20.vscoq-language-server (lib.getBin coqPackages_8_20.vscoq-language-server)
@@ -289,7 +289,6 @@ in
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "24.11"; # Did you read the comment?
-
 
   nix =
   {
