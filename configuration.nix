@@ -217,16 +217,30 @@ in
     gitFull
     vscode-with-extensions unstable.code-cursor
     unstable.claude-code unstable.codex
-    texlive.combined.scheme-full python3Packages.pygments graphviz
+
+    #texlive.combined.scheme-full
+    (texlive.combine
+      {
+        inherit (texlive)
+        scheme-basic
+        latexmk
+        beamer
+        minted
+        ;
+      })
+    python3Packages.pygments graphviz
     ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
+
     coq_8_20 coqPackages_8_20.coqide coqPackages_8_20.coq-lsp rocqPackages.vsrocq-language-server coqPackages_8_20.vscoq-language-server (lib.getBin coqPackages_8_20.vscoq-language-server)
     #(coq_9_1.override { buildIde = true; })
-    agda
-    fstar
-    idris2
-    z3 stack # Needed to install the Granule language.
-    twelf
-    smlnj mlton rlwrap # Needed to build Athena from source.
+
+    #agda
+    #fstar
+    #idris2
+    #z3 stack # Needed to install the Granule language.
+    #twelf
+    #smlnj mlton rlwrap # Needed to build Athena from source.
+
     #(tree-sitter.override { webUISupport = true; }) nodejs emscripten binaryen
     #(unstable.tree-sitter.override { webUISupport = true; }) unstable.nodejs unstable.emscripten unstable.binaryen
     #tree-sitter nodejs vsce
