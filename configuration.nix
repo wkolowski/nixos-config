@@ -213,12 +213,12 @@ in
     # slack tdesktop discord # Better use the browser versions.
 
     nodePackages.node2nix # Useful when working with jsCoq.
-    #direnv nix-direnv
     gitFull
-    vscode-with-extensions unstable.code-cursor
-    unstable.claude-code unstable.codex
+    vscode-with-extensions
+    #unstable.code-cursor
+    #unstable.claude-code
+    #unstable.codex
 
-    #texlive.combined.scheme-full
     (texlive.combine
       {
         inherit (texlive)
@@ -240,13 +240,6 @@ in
     #z3 stack # Needed to install the Granule language.
     #twelf
     #smlnj mlton rlwrap # Needed to build Athena from source.
-
-    #(tree-sitter.override { webUISupport = true; }) nodejs emscripten binaryen
-    #(unstable.tree-sitter.override { webUISupport = true; }) unstable.nodejs unstable.emscripten unstable.binaryen
-    #tree-sitter nodejs vsce
-    #(unstable.tree-sitter.override { webUISupport = true; }) nodejs
-    #(pkgsOld.tree-sitter.override { webUISupport = true; }) pkgsOld.nodejs pkgsOld.emscripten pkgsOld.binaryen pkgsOld.docker
-    #unstable.tree-sitter nodejs
   ];
 
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
