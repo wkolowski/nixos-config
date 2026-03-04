@@ -15,7 +15,7 @@ let
   # shasum -a 256 meraymond.idris-vscode-0.0.11.vsix
 
   # Axi syntax highlighting.
-  #axi-syntax-highlighting = pkgs.callPackage /home/wk/Code/TeX/Axi/vscode-axi/default.nix {};
+  axi-syntax-highlighting = (pkgs.callPackage /home/wk/Code/Pevnik-Labs/Axi/default.nix {}).vscode-extension;
 
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
@@ -37,7 +37,7 @@ let
         haskell.haskell
 
         # Axi support.
-        #axi-syntax-highlighting
+        axi-syntax-highlighting
       ])
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
