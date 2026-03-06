@@ -36,7 +36,7 @@ sudo lvcreate -n root vg -l 100%FREE
 
 # Make new filesystems and swap:
 
-sudo mkfs.vfat -n BOOT /dev/sda2
+sudo mkfs.vfat -F 32 -n BOOT /dev/sda2
 sudo mkfs.ext4 -L root /dev/vg/root
 sudo mkswap -L swap /dev/vg/swap
 
@@ -62,11 +62,6 @@ sudo mv tmp /mnt/etc/nixos/configuration.nix
 # Finish the installation:
 sudo nixos-install
 
-# Set a new password for root.
-echo "Setting up password for user root."
-sudo passwd root
-
 # Create a user and set a new password.
 echo "Setting up password for user wk."
-sudo useradd wk
-sudo passwd wk
+sudo nixos-enter --root /mnt -c 'passwd wk'
