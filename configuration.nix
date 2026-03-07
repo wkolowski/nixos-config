@@ -115,13 +115,6 @@ let
           version = "0.0.1";
           sha256 = "b6ebbc82b1ac4ab4adcf71b885b74568d3e33dc917ae238cc7597eb1768719be";
         }
-        #{
-          # tree-sitter support.
-          #name = "tree-sitter-vscode";
-          #publisher = "AlecGhost";
-          #version = "0.1.0";
-          #sha256 = "3e3aadf774188a3d150534abf31ee81e738f70a9fbbbdee776364996cbb1da9d";
-        #}
       ];
   };
 in
@@ -135,8 +128,6 @@ in
       {
         config = config.nixpkgs.config;
       };
-
-      #pkgsOld = import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/91247c747d9cf99c7e82c44119c808d1d55c16d5.tar.gz") {};
     };
 
     # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
@@ -204,20 +195,19 @@ in
     kdePackages.konsole gedit cht-sh gnumake lshw usbutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     gparted ntfsprogs bleachbit
-    deja-dup duplicity
+    deja-dup restic
     unstable.brave firefox unstable.yt-dlp
-    # calibre # For converting between ebook formats. Tip: better use nix-shell -p calibre.
+    # calibre # For converting between ebook formats. Tip: better use `nix-shell -p calibre`
     rhythmbox
     anki
-    libreoffice gimp #xournal
-    # slack tdesktop discord # Better use the browser versions.
+    libreoffice gimp
 
-    nodePackages.node2nix # Useful when working with jsCoq.
+    #nodePackages.node2nix # Useful when working with jsCoq.
     gitFull
     vscode-with-extensions
-    #unstable.code-cursor
-    #unstable.claude-code
-    #unstable.codex
+    unstable.code-cursor
+    unstable.claude-code
+    unstable.codex
 
     (texlive.combine
       {
