@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This is the full NixOS setup process for my XMG laptop.
 # It's based on [this post of Chris Martin](chris-martin.org/2015/installing-nixos) and recently refactored with the help of GPT and Claude.
@@ -19,7 +19,7 @@ NC='\033[0m' # No Color
 
 info()
 {
-  echo -e "${GREEN}$1${NC}"
+  printf "${GREEN}%s${NC}\n" "$1"
 }
 
 ## Partition table
@@ -60,6 +60,9 @@ nixos-generate-config --root /mnt
 # Overwrite the software configuration.
 # Keep the hardware configuration.
 mv configuration.nix /mnt/etc/nixos/configuration.nix
+
+info "You can adjust the configuration now"
+nano /mnt/etc/nixos/configuration.nix
 
 ## Installation
 
