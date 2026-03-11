@@ -1,0 +1,4 @@
+label: gpt
+
+size= 1GiB, type= uefi, bootable
+            type= linux
