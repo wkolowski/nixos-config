@@ -146,12 +146,6 @@ in
     # Use the systemd-boot bootloader.
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-
-    initrd.luks.devices.root =
-    {
-      device = "/dev/sda3";
-      preLVM = true;
-    };
   };
   
   networking.hostName = "nixos";           # Define your hostname.

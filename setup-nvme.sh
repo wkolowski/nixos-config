@@ -55,11 +55,14 @@ mount /dev/nvme0n1p1 /mnt/boot
 
 info "Generating NixOS configuration"
 
+# Generate the configuration.
 nixos-generate-config --root /mnt
 
-# Overwrite the software configuration.
-# Keep the hardware configuration.
-mv configuration.nix /mnt/etc/nixos/configuration.nix
+# Replace /mnt/etc/nixos/ with the current repo,
+# preserving the generated hardware configuration.
+cp /mnt/etc/nixos/hardware-configuration.nix .
+rm -rf /mnt/etc/nixos/
+cp -r . /mnt/etc/nixos/
 
 info "You can adjust the configuration now"
 nano /mnt/etc/nixos/configuration.nix
@@ -75,4 +78,3 @@ info "Setting up password for user wk."
 nixos-enter --root /mnt -c 'passwd wk'
 
 info "Installation successful!"
-
