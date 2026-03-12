@@ -147,6 +147,14 @@ in
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
+
+  # Turn on zram swap.
+  zramSwap =
+  {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
   
   networking.hostName = "nixos";           # Define your hostname.
   networking.networkmanager.enable = true; # networking.wireless doesn't work for me.
@@ -229,6 +237,49 @@ in
   # Without this, `pass` fails to ask for the gpg password and is thus unusable.
   programs.gnupg.agent.enable = true;
 
+  programs.dconf.enable = true;
+  programs.dconf.profiles.user.databases =
+  [
+    {
+      lockAll = true;
+      settings =
+      {
+        # Turn on fractional scaling.
+        "org/gnome/mutter" =
+        {
+          dynamic-workspaces = false;
+          experimental-features =
+          [
+            "scale-monitor-framebuffer"
+            "xwayland-native-scaling"
+          ];
+        };
+
+        "org/gnome/desktop/wm/preferences" =
+        {
+          num-workspaces = lib.gvariant.mkInt32 1;
+        };
+
+        "org/gnome/shell" =
+        {
+          favorite-apps =
+          [
+            "brave-browser.desktop"
+            "org.kde.konsole.desktop"
+            "org.gnome.SystemMonitor.desktop"
+            "org.gnome.baobab.desktop"
+            "org.gnome.Nautilus.desktop"
+            "org.gnome.Rhythmbox3.desktop"
+            "anki.desktop"
+            "code.desktop"
+            "coqide.desktop"
+            "org.gnome.gedit.desktop"
+          ];
+        };
+      };
+    }
+  ];
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -247,23 +298,25 @@ in
   hardware.bluetooth.enable = true;
 
   # Enable sound. Use PulseAudio, disable PipeWire.
-  #services.pipewire.enable = lib.mkForce false;
-  #hardware.pulseaudio.enable = true;
-  services.pipewire.enable = true;
-  services.pipewire.pulse.enable = true;
-  services.pulseaudio.enable = false;
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.xkb.layout = "us";
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
-
-  # GNOME desktop.
   services =
   {
+    # Daemon for updating firmware.
+    fwupd.enable = true;
+
+    pipewire =
+    {
+      enable = true;
+      pulse.enable = true;
+    };
+
+    pulseaudio.enable = false;
+
+    # Enable the X11 windowing system.
     xserver.windowManager.i3.enable = true;
+    xserver.enable = true;
+    xserver.xkb.layout = "us";
+
+    # GNOME desktop.
     displayManager.gdm.enable       = true;
     desktopManager.gnome.enable     = true;
   };
@@ -291,6 +344,13 @@ in
       # 0 means "use all available cores"
       cores = 0;
       max-jobs = "auto";
+    };
+
+    gc =
+    {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 365d";
     };
 
     optimise =

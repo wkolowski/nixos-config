@@ -8,6 +8,7 @@
 # cd nixos-config
 
 # The above guarantees that all the needed files are present.
+# Usage: sudo ./setup-nvme.sh
 
 # Fail on first error.
 set -e
