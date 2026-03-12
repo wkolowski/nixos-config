@@ -141,11 +141,12 @@ in
     ./hardware-configuration.nix
   ];
 
-  boot =
+  boot.loader =
   {
     # Use the systemd-boot bootloader.
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+    timeout = 1;
   };
 
   # Turn on zram swap.
@@ -194,11 +195,11 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    kdePackages.konsole gedit cht-sh gnumake lshw usbutils
+    kdePackages.konsole gedit gnumake lshw usbutils pciutils
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
-    gparted ntfsprogs bleachbit
-    deja-dup restic
-    unstable.brave firefox unstable.yt-dlp
+    bleachbit # ntfsprogs
+    restic
+    unstable.brave #firefox unstable.yt-dlp
     # calibre # For converting between ebook formats. Tip: better use `nix-shell -p calibre`
     rhythmbox
     anki
@@ -221,7 +222,7 @@ in
         ;
       })
     python3Packages.pygments graphviz
-    ghc haskellPackages.alex haskellPackages.happy haskellPackages.haskell-language-server
+    ghc haskellPackages.haskell-language-server #haskellPackages.alex haskellPackages.happy
 
     coq_8_20 coqPackages_8_20.coqide coqPackages_8_20.coq-lsp rocqPackages.vsrocq-language-server coqPackages_8_20.vscoq-language-server (lib.getBin coqPackages_8_20.vscoq-language-server)
     #(coq_9_1.override { buildIde = true; })
