@@ -195,7 +195,8 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs;
   [
-    kdePackages.konsole gedit gnumake lshw usbutils pciutils
+    kdePackages.konsole gnumake lshw usbutils pciutils shellcheck
+    gedit
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     bleachbit # ntfsprogs
     restic
