@@ -141,6 +141,20 @@ in
     ./hardware-configuration.nix
   ];
 
+  # Hibernate to encrypted swap file.
+  powerManagement.enable = true;
+
+  swapDevices =
+  [
+    {
+      device = "/var/lib/swapfile";
+      size = 64 * 1024; # 64 GB, same as RAM size
+    }
+  ];
+
+  boot.resumeDevice = "/dev/disk/by-uuid/381d4675-40ad-4e29-ac0c-0dfbcdc0903a";
+  boot.kernelParams = [ "resume_offset=54726656" ];
+
   boot.loader =
   {
     # Use the systemd-boot bootloader.
