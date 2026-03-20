@@ -263,8 +263,23 @@ in
     #smlnj mlton rlwrap # Needed to build Athena from source.
   ];
 
-  # Without this, `pass` fails to ask for the gpg password and is thus unusable.
-  programs.gnupg.agent.enable = true;
+  # `sudo` password is cached for 15 minutes.
+  security.sudo.extraConfig =
+  ''
+    Defaults timestamp_timeout=15
+  '';
+
+  programs.gnupg.agent =
+  {
+    # Without this, `pass` fails to ask for the gpg password and is thus unusable.
+    enable = true;
+
+    # Password is cached for 15 minutes.
+    settings =
+    {
+      default-cache-ttl = 900;
+    };
+  };
 
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases =
