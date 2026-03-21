@@ -233,6 +233,11 @@ in
     anki
     libreoffice gimp
 
+    # Tools for YubiKey.
+    yubikey-manager
+    yubioath-flutter
+    pcsclite
+
     #nodePackages.node2nix # Useful when working with jsCoq.
     gitFull
     vscode-with-extensions
@@ -344,6 +349,9 @@ in
   # Enable sound. Use PulseAudio, disable PipeWire.
   services =
   {
+    # Turn on support for some YubiKey features.
+    pcscd.enable = true;
+
     # Daemon for updating firmware.
     fwupd.enable = true;
 
