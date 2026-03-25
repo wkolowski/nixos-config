@@ -373,11 +373,31 @@ in
     desktopManager.gnome.enable     = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.wk =
+  users =
   {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "vboxusers" ]; # Provide user with sudo and virtualbox access.
+    # User management is imperative, because we don't want to
+    # store password hashes in the config.
+    mutableUsers = true;
+
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.wk =
+    {
+      isNormalUser = true;
+
+      # Provide user with sudo and virtualbox access.
+      extraGroups = [ "wheel" "vboxusers" ];
+    };
+  };
+
+  # Block logging in as root, i.e. using `su`, to reduce attack surface
+  # and so that I don't need to remember an additional password.
+  system.activationScripts.lockRoot =
+  {
+    deps = [ "users" ];
+    text =
+    ''
+      ${pkgs.shadow}/bin/passwd -l root > /dev/null 2>&1 || true
+    '';
   };
 
   # This value determines the NixOS release with which your system is to be
