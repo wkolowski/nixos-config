@@ -141,6 +141,9 @@ in
     ./hardware-configuration.nix
   ];
 
+  # Use latest stable kernel.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Hibernate to encrypted swap file.
   powerManagement.enable = true;
 
