@@ -144,6 +144,14 @@ in
   # Use latest stable kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Ethernet driver.
+  boot.extraModulePackages =
+  [
+    config.boot.kernelPackages.yt6801
+  ];
+
+  boot.kernelModules = [ "yt6801" ];
+
   # Hibernate to encrypted swap file.
   powerManagement.enable = true;
 
