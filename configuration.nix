@@ -188,7 +188,12 @@ in
   };
   
   networking.hostName = "nixos";           # Define your hostname.
-  networking.networkmanager.enable = true; # networking.wireless doesn't work for me.
+
+  networking.networkmanager =
+  {
+    enable = true;
+    wifi.powersave = false;
+  };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
