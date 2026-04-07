@@ -220,6 +220,17 @@ in
   #  consoleKeyMap = "pl";
   #  defaultLocale = "pl_PL.UTF-8";
   #};
+  fonts =
+  {
+    enableDefaultPackages = true;
+    packages = with pkgs;
+    [
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+    ];
+ };
 
   # Beware: in case of problems with Polish keyboard layout (with the letter ę) try these:
   # nix-shell -p gnome3.dconf --run "dconf read /org/gnome/desktop/input-sources/xkb-options"
@@ -243,7 +254,7 @@ in
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     bleachbit # ntfsprogs
     restic
-    unstable.brave #firefox unstable.yt-dlp
+    brave #firefox unstable.yt-dlp
     # calibre # For converting between ebook formats. Tip: better use `nix-shell -p calibre`
     rhythmbox
     anki
