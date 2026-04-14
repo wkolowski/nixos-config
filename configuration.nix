@@ -214,12 +214,12 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  #i18n =
-  #{
-  #  consoleFont = "Lat2-Terminus16";
-  #  consoleKeyMap = "pl";
-  #  defaultLocale = "pl_PL.UTF-8";
-  #};
+  i18n =
+  {
+    defaultLocale = "en_GB.UTF-8";
+    extraLocales = [ "en_GB.UTF-8/UTF-8" ];
+  };
+
   fonts =
   {
     enableDefaultPackages = true;
@@ -382,6 +382,7 @@ in
     # Daemon for updating firmware.
     fwupd.enable = true;
 
+    # Sound.
     pipewire =
     {
       enable = true;
