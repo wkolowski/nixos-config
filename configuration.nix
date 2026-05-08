@@ -254,7 +254,7 @@ in
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     bleachbit # ntfsprogs
     restic
-    brave #firefox unstable.yt-dlp
+    unstable.brave #firefox unstable.yt-dlp
     # calibre # For converting between ebook formats. Tip: better use `nix-shell -p calibre`
     rhythmbox
     anki
