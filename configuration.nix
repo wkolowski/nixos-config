@@ -147,10 +147,10 @@ in
   boot.resumeDevice = "/dev/mapper/nvme0n1p2_crypt";
   boot.kernelParams = [ "resume_offset=54726656" ];
 
-  systemd.sleep.extraConfig =
-  ''
-    HibernateDelaySec=5min
-  '';
+  systemd.sleep.settings.Sleep =
+  {
+    HibernateDelaySec = "5min";
+  };
 
   # Doesn't work...
   services.logind.settings.Login =
