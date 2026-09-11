@@ -61,7 +61,7 @@ nixos-generate-config --root /mnt
 
 # Replace /mnt/etc/nixos/ with the current repo,
 # preserving the generated hardware configuration.
-cp /mnt/etc/nixos/hardware-configuration.nix .
+cp /mnt/etc/nixos/hardware-configuration.nix ./hardware-configuration-xmg.nix
 rm -rf /mnt/etc/nixos/
 cp -r . /mnt/etc/nixos/
 
@@ -71,7 +71,7 @@ nano /mnt/etc/nixos/configuration.nix
 ## Installation
 
 info "Installing NixOS"
-nixos-install
+nixos-install --flake /mnt/etc/nixos#nixos
 
 ## Post-installation
 

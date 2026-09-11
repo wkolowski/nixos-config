@@ -2,20 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, unstablePkgs, ... }:
 
 let
-  # NixOS unstable channel.
-  unstableTarball =
-    fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-
   # Visual Studio Code extensions.
   # Protip: to get sha256 of some extensions, download it from VSCode Marketplace
   # and then run shasum -a 256 on the .vsix file, i.e.
   # shasum -a 256 meraymond.idris-vscode-0.0.11.vsix
 
   # Axi syntax highlighting.
-  axi-syntax-highlighting = (pkgs.callPackage /home/wk/Code/Pevnik-Labs/Axi/default.nix {}).vscode-extension;
+  #axi-syntax-highlighting = (pkgs.callPackage /home/wk/Code/Pevnik-Labs/Axi/default.nix {}).vscode-extension;
 
   vscode-with-extensions = pkgs.vscode-with-extensions.override
   {
@@ -37,7 +33,7 @@ let
         haskell.haskell
 
         # Axi support.
-        axi-syntax-highlighting
+        #axi-syntax-highlighting
       ])
       ++
       pkgs.vscode-utils.extensionsFromVscodeMarketplace
@@ -121,25 +117,10 @@ in
 {
   nixpkgs.config =
   {
-    # Make the unstable channel available.
-    packageOverrides = pkgs:
-    {
-      unstable = import unstableTarball
-      {
-        config = config.nixpkgs.config;
-      };
-    };
-
     # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
     allowUnfree = true;
     allowBroken = true;
   };
-
-  imports =
-  [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
 
   # Use latest stable kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -254,7 +235,7 @@ in
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     bleachbit # ntfsprogs
     restic
-    unstable.brave #firefox unstable.yt-dlp
+    unstablePkgs.brave #firefox unstablePkgs.yt-dlp
     # calibre # For converting between ebook formats. Tip: better use `nix-shell -p calibre`
     rhythmbox
     anki
@@ -268,9 +249,9 @@ in
     #nodePackages.node2nix # Useful when working with jsCoq.
     gitFull
     vscode-with-extensions
-    unstable.code-cursor
-    unstable.claude-code
-    unstable.codex
+    unstablePkgs.code-cursor
+    unstablePkgs.claude-code
+    unstablePkgs.codex
 
     (texlive.combine
       {
