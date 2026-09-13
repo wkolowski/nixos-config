@@ -122,9 +122,6 @@ in
     allowBroken = true;
   };
 
-  # Use latest stable kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
   # Ethernet driver.
   boot.extraModulePackages =
   [
@@ -149,15 +146,23 @@ in
 
   systemd.sleep.settings.Sleep =
   {
-    HibernateDelaySec = "5min";
+    # ACPI "platform" hibernation is broken.
+    HibernateMode = "shutdown";
+
+    # Normal suspend is not allowed. "Suspend then hibernate" will hibernate after 10 minutes.
+    AllowSuspend = false;
+    AllowSuspendThenHibernate = true;
+    HibernateDelaySec = "10min";
   };
 
   # Doesn't work...
   services.logind.settings.Login =
   {
-    HandleLidSwitch = "suspend-then-hibernate";
-    HandleLidSwitchExternalPower = "suspend-then-hibernate";
-    HandlePowerKey = "suspend-then-hibernate";
+    HandleLidSwitch = "hibernate";
+    HandleLidSwitchExternalPower = "hibernate";
+
+    # Hibernate even when docked / using an external display.
+    HandleLidSwitchDocked = "hibernate";
   };
 
   boot.loader =
@@ -231,6 +236,7 @@ in
   environment.systemPackages = with pkgs;
   [
     kdePackages.konsole gnumake lshw usbutils pciutils shellcheck
+    gnomeExtensions.power-off-options
     gedit
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     bleachbit # ntfsprogs
@@ -332,6 +338,25 @@ in
             "coqide.desktop"
             "org.gnome.gedit.desktop"
           ];
+        };
+
+        "org/gnome/settings-daemon/plugins/power" =
+        {
+          # When the power button is assigned "hibernate", the computer will
+          # hibernate right after pressing power to exit hibernation...
+          power-button-action = "nothing";
+        };
+
+        "org/gnome/shell/extensions/power-off-options" =
+        {
+          show-hibernate = true;
+          show-suspend-then-hibernate = true;
+
+          show-hybrid-sleep = false;
+          show-screenoff = false;
+          show-soft-reboot = false;
+          show-reboot-to-bios = false;
+          show-settings = false;
         };
       };
     }
