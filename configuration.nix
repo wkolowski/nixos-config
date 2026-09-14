@@ -1,8 +1,4 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, lib, unstablePkgs, ... }:
+{ pkgs, lib, unstablePkgs, ... }:
 
 let
   # Visual Studio Code extensions.
@@ -122,47 +118,14 @@ in
     allowBroken = true;
   };
 
-  # Ethernet driver.
-  boot.extraModulePackages =
-  [
-    config.boot.kernelPackages.yt6801
-  ];
+  #powerManagement.enable = true;
 
-  boot.kernelModules = [ "yt6801" ];
-
-  # Hibernate to encrypted swap file.
-  powerManagement.enable = true;
-
-  swapDevices =
-  [
-    {
-      device = "/var/lib/swapfile";
-      size = 64 * 1024; # 64 GB, same as RAM size
-    }
-  ];
-
-  boot.resumeDevice = "/dev/mapper/nvme0n1p2_crypt";
-  boot.kernelParams = [ "resume_offset=54726656" ];
-
-  systemd.sleep.settings.Sleep =
+  # Turn on zram swap.
+  zramSwap =
   {
-    # Withotu this, pressing Power during suspend-then-hibernate hangs the system.
-    HibernateMode = "shutdown";
-
-    # suspend is not allowed.
-    AllowSuspend = false;
-
-    # suspend-then-hibernate will hibernate after 10 minutes.
-    AllowSuspendThenHibernate = true;
-    HibernateDelaySec = "10min";
-  };
-
-  # Lid handling is buggy, ignore it altogether.
-  services.logind.settings.Login =
-  {
-    HandleLidSwitch = "ignore";
-    HandleLidSwitchExternalPower = "ignore";
-    HandleLidSwitchDocked = "ignore";
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
   };
 
   boot.loader =
@@ -173,15 +136,25 @@ in
     timeout = 1;
   };
 
-  # Turn on zram swap.
-  zramSwap =
+  systemd.sleep.settings.Sleep =
   {
-    enable = true;
-    algorithm = "zstd";
-    memoryPercent = 50;
+    # suspend is not allowed.
+    AllowSuspend = false;
+
+    # suspend-then-hibernate will hibernate after 10 minutes.
+    AllowSuspendThenHibernate = true;
+    HibernateDelaySec = "10min";
   };
-  
-  networking.hostName = "nixos";           # Define your hostname.
+
+  # Lid should do nothing.
+  services.logind.settings.Login =
+  {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+    HandleLidSwitchDocked = "ignore";
+  };
+
+  hardware.bluetooth.enable = true;
 
   networking.networkmanager =
   {
@@ -189,17 +162,8 @@ in
     wifi.powersave = false;
   };
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  #networking.useDHCP = false;
-  #networking.interfaces.enp2s0.useDHCP = true;
+  time.timeZone = "Europe/Warsaw";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
   i18n =
   {
     defaultLocale = "en_GB.UTF-8";
@@ -218,21 +182,71 @@ in
     ];
  };
 
-  # Beware: in case of problems with Polish keyboard layout (with the letter ę) try these:
-  # nix-shell -p gnome3.dconf --run "dconf read /org/gnome/desktop/input-sources/xkb-options"
-  # nix-shell -p gnome3.dconf --run "dconf reset /org/gnome/desktop/input-sources/xkb-options"
+  # Block logging in as root, i.e. using `su`, to reduce attack surface
+  # and so that I don't need to remember an additional password.
+  system.activationScripts.lockRoot =
+  {
+    deps = [ "users" ];
+    text =
+    ''
+      ${pkgs.shadow}/bin/passwd -l root > /dev/null 2>&1 || true
+    '';
+  };
 
-  # Set your time zone.
-  time.timeZone = "Europe/Warsaw";
+  users =
+  {
+    # User management is imperative, because we don't want to
+    # store password hashes in the config.
+    mutableUsers = true;
+
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.wk =
+    {
+      isNormalUser = true;
+
+      # Provide user with sudo and virtualbox access.
+      extraGroups = [ "wheel" "vboxusers" ];
+    };
+  };
+
+  # `sudo` password is cached for 15 minutes.
+  security.sudo.extraConfig =
+  ''
+    Defaults timestamp_timeout=15
+  '';
+
+  services =
+  {
+    # Turn on support for some YubiKey features.
+    pcscd.enable = true;
+
+    # Daemon for updating firmware.
+    fwupd.enable = true;
+
+    # Use PipeWire, disable PulseAudio.
+    pipewire =
+    {
+      enable = true;
+      pulse.enable = true;
+    };
+
+    pulseaudio.enable = false;
+
+    # X11 support, including i3.
+    xserver.enable = true;
+    xserver.windowManager.i3.enable = true;
+    xserver.xkb.layout = "us";
+
+    # GNOME desktop.
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
 
   # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
   # It doesn't work and results in the error "Kernel driver not accessible".
   # Note that the extension pack makes virtualbox recompile from source which takes a very long time.
   #virtualisation.virtualbox.host.enable = true;
   #virtualisation.virtualbox.host.enableExtensionPack = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs;
   [
     kdePackages.konsole gnumake lshw usbutils pciutils shellcheck
@@ -282,12 +296,6 @@ in
     #smlnj mlton rlwrap # Needed to build Athena from source.
   ];
 
-  # `sudo` password is cached for 15 minutes.
-  security.sudo.extraConfig =
-  ''
-    Defaults timestamp_timeout=15
-  '';
-
   programs.gnupg.agent =
   {
     # Without this, `pass` fails to ask for the gpg password and is thus unusable.
@@ -300,6 +308,7 @@ in
     };
   };
 
+  # GNOME-specific settings.
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases =
   [
@@ -318,11 +327,13 @@ in
           ];
         };
 
+        # There should be only one workspace.
         "org/gnome/desktop/wm/preferences" =
         {
           num-workspaces = lib.gvariant.mkInt32 1;
         };
 
+        # Pin apps to the app bar.
         "org/gnome/shell" =
         {
           favorite-apps =
@@ -340,6 +351,8 @@ in
           ];
         };
 
+        # Configure top right corner menu. There should be suspend-then-hibernate
+        # and hibernate, but no suspend nor other clutter.
         "org/gnome/shell/extensions/power-off-options" =
         {
           show-hibernate = true;
@@ -354,84 +367,6 @@ in
       };
     }
   ];
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable bluetooth.
-  hardware.bluetooth.enable = true;
-
-  # Enable sound. Use PulseAudio, disable PipeWire.
-  services =
-  {
-    # Turn on support for some YubiKey features.
-    pcscd.enable = true;
-
-    # Daemon for updating firmware.
-    fwupd.enable = true;
-
-    # Sound.
-    pipewire =
-    {
-      enable = true;
-      pulse.enable = true;
-    };
-
-    pulseaudio.enable = false;
-
-    # Enable the X11 windowing system.
-    xserver.windowManager.i3.enable = true;
-    xserver.enable = true;
-    xserver.xkb.layout = "us";
-
-    # GNOME desktop.
-    displayManager.gdm.enable       = true;
-    desktopManager.gnome.enable     = true;
-  };
-
-  users =
-  {
-    # User management is imperative, because we don't want to
-    # store password hashes in the config.
-    mutableUsers = true;
-
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.wk =
-    {
-      isNormalUser = true;
-
-      # Provide user with sudo and virtualbox access.
-      extraGroups = [ "wheel" "vboxusers" ];
-    };
-  };
-
-  # Block logging in as root, i.e. using `su`, to reduce attack surface
-  # and so that I don't need to remember an additional password.
-  system.activationScripts.lockRoot =
-  {
-    deps = [ "users" ];
-    text =
-    ''
-      ${pkgs.shadow}/bin/passwd -l root > /dev/null 2>&1 || true
-    '';
-  };
-
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "24.11"; # Did you read the comment?
 
   nix =
   {
@@ -458,4 +393,10 @@ in
       dates = [ "weekly" ];
     };
   };
+
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "24.11"; # Did you read the comment?
 }

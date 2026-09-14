@@ -71,7 +71,7 @@ nano /mnt/etc/nixos/configuration.nix
 ## Installation
 
 info "Installing NixOS"
-nixos-install --flake /mnt/etc/nixos#nixos
+nixos-install --flake /mnt/etc/nixos#xmg
 
 ## Post-installation
 

@@ -22,7 +22,7 @@
       };
     in
     {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem
+      nixosConfigurations.xmg = nixpkgs.lib.nixosSystem
       {
         inherit system;
 
@@ -33,8 +33,9 @@
 
         modules =
         [
-          ./configuration.nix
           ./hardware-configuration-xmg.nix
+          ./xmg.nix
+          ./configuration.nix
         ];
       };
     };
