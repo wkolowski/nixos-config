@@ -36,6 +36,7 @@
           ./hardware-configuration-xmg.nix
           ./xmg.nix
           ./configuration.nix
+          ./gaming.nix
         ];
       };
     };
