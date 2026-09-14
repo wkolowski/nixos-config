@@ -146,23 +146,20 @@ in
 
   systemd.sleep.settings.Sleep =
   {
-    # ACPI "platform" hibernation is broken.
-    HibernateMode = "shutdown";
-
-    # Normal suspend is not allowed. "Suspend then hibernate" will hibernate after 10 minutes.
+    # suspend is not allowed.
     AllowSuspend = false;
+
+    # suspend-then-hibernate will hibernate after 10 minutes.
     AllowSuspendThenHibernate = true;
     HibernateDelaySec = "10min";
   };
 
-  # Doesn't work...
+  # Lid handling is buggy, ignore it altogether.
   services.logind.settings.Login =
   {
-    HandleLidSwitch = "hibernate";
-    HandleLidSwitchExternalPower = "hibernate";
-
-    # Hibernate even when docked / using an external display.
-    HandleLidSwitchDocked = "hibernate";
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+    HandleLidSwitchDocked = "ignore";
   };
 
   boot.loader =
@@ -338,13 +335,6 @@ in
             "coqide.desktop"
             "org.gnome.gedit.desktop"
           ];
-        };
-
-        "org/gnome/settings-daemon/plugins/power" =
-        {
-          # When the power button is assigned "hibernate", the computer will
-          # hibernate right after pressing power to exit hibernation...
-          power-button-action = "nothing";
         };
 
         "org/gnome/shell/extensions/power-off-options" =
