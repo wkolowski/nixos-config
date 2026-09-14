@@ -146,6 +146,9 @@ in
 
   systemd.sleep.settings.Sleep =
   {
+    # Withotu this, pressing Power during suspend-then-hibernate hangs the system.
+    HibernateMode = "shutdown";
+
     # suspend is not allowed.
     AllowSuspend = false;
 
