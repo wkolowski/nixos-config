@@ -14,11 +14,7 @@
       {
         inherit system;
 
-        config =
-        {
-          allowUnfree = true;
-          allowBroken = true;
-        };
+        config.allowUnfree = true;
       };
     in
     {

@@ -111,14 +111,8 @@ let
   };
 in
 {
-  nixpkgs.config =
-  {
-    # Allow proprietary and broken packages, like VSCode and... well, I don't remember what's broken.
-    allowUnfree = true;
-    allowBroken = true;
-  };
-
-  #powerManagement.enable = true;
+    # Allow proprietary packages like vscode.
+  nixpkgs.config.allowUnfree = true;
 
   # Turn on zram swap.
   zramSwap =
@@ -164,11 +158,7 @@ in
 
   time.timeZone = "Europe/Warsaw";
 
-  i18n =
-  {
-    defaultLocale = "en_GB.UTF-8";
-    extraLocales = [ "en_GB.UTF-8/UTF-8" ];
-  };
+  i18n.defaultLocale = "en_GB.UTF-8";
 
   fonts =
   {
@@ -204,8 +194,8 @@ in
     {
       isNormalUser = true;
 
-      # Provide user with sudo and virtualbox access.
-      extraGroups = [ "wheel" "vboxusers" ];
+      # Provide user with sudo.
+      extraGroups = [ "wheel" ];
     };
   };
 
@@ -233,20 +223,18 @@ in
     pulseaudio.enable = false;
 
     # X11 support, including i3.
-    xserver.enable = true;
-    xserver.windowManager.i3.enable = true;
-    xserver.xkb.layout = "us";
+    xserver =
+    {
+      enable = true;
+      windowManager.i3.enable = true;
+      xkb.layout = "us";
+    };
 
     # GNOME desktop.
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
   };
 
-  # Beware! Never install virtualbox using environment.systemPackages.virtualbox.
-  # It doesn't work and results in the error "Kernel driver not accessible".
-  # Note that the extension pack makes virtualbox recompile from source which takes a very long time.
-  #virtualisation.virtualbox.host.enable = true;
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
   environment.systemPackages = with pkgs;
   [
     kdePackages.konsole gnumake lshw usbutils pciutils shellcheck
@@ -283,10 +271,9 @@ in
         ;
       })
     python3Packages.pygments graphviz
-    ghc haskellPackages.haskell-language-server #haskellPackages.alex haskellPackages.happy
+    ghc haskellPackages.haskell-language-server
 
     coq_8_20 coqPackages_8_20.coqide coqPackages_8_20.coq-lsp rocqPackages.vsrocq-language-server coqPackages_8_20.vscoq-language-server (lib.getBin coqPackages_8_20.vscoq-language-server)
-    #(coq_9_1.override { buildIde = true; })
 
     #agda
     #fstar
@@ -302,10 +289,7 @@ in
     enable = true;
 
     # Password is cached for 15 minutes.
-    settings =
-    {
-      default-cache-ttl = 900;
-    };
+    settings.default-cache-ttl = 900;
   };
 
   # GNOME-specific settings.
@@ -372,12 +356,17 @@ in
   {
     settings =
     {
-      # Turn on flakes and nix-command.
-      experimental-features = [ "nix-command" "flakes" ];
-
-      # 0 means "use all available cores"
+      # 0 means "use all available cores".
       cores = 0;
       max-jobs = "auto";
+
+      # Turn on flakes and nix-command.
+      experimental-features =
+      [
+        "nix-command"
+        "flakes"
+        "pipe-operators"
+      ];
     };
 
     gc =
