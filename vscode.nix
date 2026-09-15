@@ -14,7 +14,7 @@ let
       # Haskell support.
       haskell.language-haskell
       haskell.haskell
-      
+
       rocq-prover.vsrocq
       ms-vscode.wasm-wasi-core
       ejgallego.coq-lsp

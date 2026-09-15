@@ -178,6 +178,11 @@
     settings.default-cache-ttl = 900;
   };
 
+
+  # Turn on SSH.
+  programs.gnupg.agent.enableSSHSupport = true;
+  services.gnome.gcr-ssh-agent.enable = false;
+
   # GNOME-specific settings.
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases =
