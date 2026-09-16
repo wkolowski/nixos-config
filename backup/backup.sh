@@ -32,6 +32,9 @@ restic -r "$CLOUD" backup "$HOME" \
 info "Prune cloud backup: keep latest"
 restic -r "$CLOUD" forget --keep-last 1 --prune
 
+info "Checking integrity of cloud backup"
+restic -r "$CLOUD" check --read-data
+
 info "Local backup..."
 restic -r "$LOCAL" backup "$HOME" \
   --exclude "$HOME/Games" \
@@ -43,10 +46,7 @@ restic -r "$LOCAL" backup "$HOME" \
   --exclude "$HOME/.local/share/uv"
 
 info "Prune local backup: keep latest"
-restic -r "$LOCAL" forget --keep-last 10 --prune
-
-info "Checking integrity of cloud backup"
-restic -r "$CLOUD" check --read-data
+restic -r "$LOCAL" forget --keep-last 1 --prune
 
 info "Checking integrity of local backup"
 restic -r "$LOCAL" check --read-data
