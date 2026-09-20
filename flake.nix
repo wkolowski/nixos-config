@@ -32,6 +32,7 @@
           ./hardware-configuration-xmg.nix
           ./xmg.nix
           ./configuration.nix
+          ./gnome.nix
           ./vscode.nix
           ./gaming.nix
         ];

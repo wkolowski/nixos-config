@@ -108,24 +108,11 @@
     };
 
     pulseaudio.enable = false;
-
-    # X11 support, including i3.
-    xserver =
-    {
-      enable = true;
-      windowManager.i3.enable = true;
-      xkb.layout = "us";
-    };
-
-    # GNOME desktop.
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
   };
 
   environment.systemPackages = with pkgs;
   [
     kdePackages.konsole gnumake lshw usbutils pciutils shellcheck
-    gnomeExtensions.power-off-options
     gedit
     pass wl-clipboard # without wl-clipboard, pass -c doesn't work
     bleachbit # ntfsprogs
@@ -169,79 +156,39 @@
     #smlnj mlton rlwrap # Needed to build Athena from source.
   ];
 
+  xdg.mime.defaultApplications =
+  {
+    # Set Brave as the default browser.
+    "text/html" = "brave-browser.desktop";
+    "application/xhtml+xml" = "brave-browser.desktop";
+    "x-scheme-handler/http" = "brave-browser.desktop";
+    "x-scheme-handler/https" = "brave-browser.desktop";
+    "x-scheme-handler/about" = "brave-browser.desktop";
+    "x-scheme-handler/unknown" = "brave-browser.desktop";
+
+    # Open .csv files using gedit.
+    "text/csv" = "org.gnome.gedit.desktop";
+    "text/comma-separated-values" = "org.gnome.gedit.desktop";
+    "text/x-csv" = "org.gnome.gedit.desktop";
+    "text/x-comma-separated-values" = "org.gnome.gedit.desktop";
+    "application/csv" = "org.gnome.gedit.desktop";
+
+    # Open .xml files using gedit.
+    "text/xml" = "org.gnome.gedit.desktop";
+    "application/xml" = "org.gnome.gedit.desktop";
+  };
+
   programs.gnupg.agent =
   {
     # Without this, `pass` fails to ask for the gpg password and is thus unusable.
     enable = true;
 
+    # Turn on SSH.
+    enableSSHSupport = true;
+
     # Password is cached for 15 minutes.
     settings.default-cache-ttl = 900;
   };
-
-
-  # Turn on SSH.
-  programs.gnupg.agent.enableSSHSupport = true;
-  services.gnome.gcr-ssh-agent.enable = false;
-
-  # GNOME-specific settings.
-  programs.dconf.enable = true;
-  programs.dconf.profiles.user.databases =
-  [
-    {
-      lockAll = true;
-      settings =
-      {
-        # Turn on fractional scaling.
-        "org/gnome/mutter" =
-        {
-          dynamic-workspaces = false;
-          experimental-features =
-          [
-            "scale-monitor-framebuffer"
-            "xwayland-native-scaling"
-          ];
-        };
-
-        # There should be only one workspace.
-        "org/gnome/desktop/wm/preferences" =
-        {
-          num-workspaces = lib.gvariant.mkInt32 1;
-        };
-
-        # Pin apps to the app bar.
-        "org/gnome/shell" =
-        {
-          favorite-apps =
-          [
-            "brave-browser.desktop"
-            "org.kde.konsole.desktop"
-            "org.gnome.SystemMonitor.desktop"
-            "org.gnome.baobab.desktop"
-            "org.gnome.Nautilus.desktop"
-            "org.gnome.Rhythmbox3.desktop"
-            "anki.desktop"
-            "code.desktop"
-            "coqide.desktop"
-            "org.gnome.gedit.desktop"
-          ];
-        };
-
-        # Configure top right corner menu. There should be suspend-then-hibernate
-        # and hibernate, but no suspend nor other clutter.
-        "org/gnome/shell/extensions/power-off-options" =
-        {
-          show-hibernate = true;
-          show-suspend-then-hibernate = true;
-
-          show-hybrid-sleep = false;
-          show-screenoff = false;
-          show-soft-reboot = false;
-          show-reboot-to-bios = false;
-          show-settings = false;
-        };
-      };
-    }
-  ];
 
   nix =
   {
