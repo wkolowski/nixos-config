@@ -119,9 +119,6 @@
             "org.gnome.baobab.desktop"
             "org.gnome.Nautilus.desktop"
             "org.gnome.Rhythmbox3.desktop"
-            #"anki.desktop"
-            #"code.desktop"
-            #"coqide.desktop"
           ];
 
           # Turn on the extensions.
@@ -177,6 +174,15 @@
           events-button = false;
           weather = false;
           world-clock = false;
+
+          # Turn off the pop-up that begs for donations.
+          support-notifier-type = lib.gvariant.mkInt32 0;
+        };
+
+        # Turn off the pop-up that begs for donations.
+        "org/gnome/settings-daemon/plugins/housekeeping" =
+        {
+          donation-reminder-enabled = false;
         };
       };
     }

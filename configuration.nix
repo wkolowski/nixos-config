@@ -108,6 +108,9 @@
     };
 
     pulseaudio.enable = false;
+
+    # Perl-free user management for NixOS.
+    userborn.enable = true;
   };
 
   environment.systemPackages = with pkgs;
