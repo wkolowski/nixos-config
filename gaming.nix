@@ -20,5 +20,6 @@
   [
     lutris
     protonup-qt
+    heroic
   ];
 }
