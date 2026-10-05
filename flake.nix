@@ -39,7 +39,7 @@
           ./configuration.nix
           ./gnome.nix
           ./vscode.nix
-          ./gaming.nix
+          #./gaming.nix
         ];
       };
     };

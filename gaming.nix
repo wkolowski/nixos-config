@@ -21,5 +21,6 @@
     lutris
     protonup-qt
     heroic
+    mangohud     # To display FPS and GPU load.
   ];
 }
