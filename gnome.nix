@@ -104,6 +104,11 @@
           clock-show-weekday = true;
         };
 
+        "org/gnome/desktop/lockdown" =
+        {
+          disable-lock-screen = true;
+        };
+
         "org/gnome/shell" =
         {
           # Skip the tutorial.
