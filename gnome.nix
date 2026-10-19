@@ -9,13 +9,6 @@
 
     # Turn off GNOME's SSH agent.
     gnome.gcr-ssh-agent.enable = false;
-
-    # No need to enter user password after (re)boot.
-    displayManager.autoLogin =
-    {
-      enable = true;
-      user = "wk";
-    };
   };
 
   environment.systemPackages = with pkgs;
